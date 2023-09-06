@@ -43,9 +43,7 @@ def literalquery(statement):
     """
     NOTE: This is entirely insecure. DO NOT execute the resulting strings.
     """
-    import sqlalchemy.orm
-
-    if isinstance(statement, sqlalchemy.orm.Query):
+    if isinstance(statement, Query):
         statement = statement.statement
     return statement.compile(
         dialect=LiteralDialect(),
