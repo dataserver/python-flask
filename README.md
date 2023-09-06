@@ -13,6 +13,7 @@ Flask app boilerplate with database
 ## Control Panel
 
     Demo users:
+    
     username: admin
     password: admin
 
@@ -26,11 +27,12 @@ Flask app boilerplate with database
     wsgi.py (for production)
 
 ## Logs
-  Check runner.py and wsgi.py files to set logs
-  
+
 > https://flask.palletsprojects.com/en/2.3.x/logging/  
 > When you want to configure logging for your project, you should do it as soon as possible when the program starts.  
 > If you do not configure logging yourself, Flask will add a StreamHandler to app.logger automatically 
+
+  Then the logger are defined inside runner.py and wsgi.py.
 
 
 ## Look up order for templates
