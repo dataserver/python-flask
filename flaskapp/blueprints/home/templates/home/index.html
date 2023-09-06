@@ -1,0 +1,22 @@
+{% extends "layouts/app.html" %}
+
+{% block title %}Home{% endblock title %}
+
+{% block main %}
+<main>
+    <div class="container">
+    {% if current_user.username %}
+        <p>Hello, {{current_user.username}}.</p>
+    {% else %}
+        <p>Please <a href="{{ url_for('auth.login') }}">login</a></p>
+    {% endif %}
+        main/index.html
+    </div>
+</main>
+{% endblock main %}
+
+
+{% block script %}
+<script>
+</script>
+{% endblock script %}

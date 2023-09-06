@@ -1,0 +1,18 @@
+{% extends "layouts/app.html" %}
+
+{% block title %}Method Not Allowed Error{% endblock title %}
+
+{% block main %}
+<main>
+    <div class="container">
+    <h1>405 Method Not Allowed Error</h1>
+    <p><a href="{{ url_for('home.index') }}">Home</a>
+    </div>
+</main>
+{% endblock main %}
+
+
+{% block script %}
+<script>
+</script>
+{% endblock script %}

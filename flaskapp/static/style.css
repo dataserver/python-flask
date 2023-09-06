@@ -1,0 +1,100 @@
+/* login form */
+.form-signin {
+    max-width: 330px;
+    padding: 15px;
+}
+
+.form-signin .form-floating:focus-within {
+    z-index: 2;
+}
+
+.form-signin input[type="text"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+/* Dark mode */
+/* https://www.rapidtables.com/convert/color/hex-to-rgb.html */
+[data-bs-theme=dark] {
+    color-scheme: dark;
+    --bs-body-color: #b9b9b9;
+    --bs-body-color-rgb: 185, 185, 185;
+    --bs-body-bg: #000000;
+    --bs-body-bg-rgb: 0, 0, 0;
+    --bs-secondary-bg: #343a40;
+    --bs-secondary-bg-rgb: 52, 58, 64;
+    --bs-tertiary-bg: #2b3035;
+    --bs-tertiary-bg-rgb: 43, 48, 53;
+}
+
+/* dark mode switcher */
+.dark-mode-switcher {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 9999;
+}
+
+.dark-mode-switcher label {
+    height: 30px;
+    width: 60px;
+    background: #39393d;
+    margin: 0 7px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    position: relative;
+    cursor: pointer;
+    border-radius: 100px;
+}
+
+.dark-mode-switcher img {
+    height: auto;
+    max-height: 18px;
+    max-width: 18px;
+}
+
+.dark-mode-switcher .toggle-circle {
+    top: 50%;
+    height: 25px;
+    width: 25px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, .15);
+    border-radius: 100px;
+    transform: translateY(-50%) !important;
+    transition: all .2s ease;
+
+    position: absolute;
+    background: #fff;
+    left: 2px;
+}
+
+.dark-mode-switcher.active .toggle-circle {
+    background: #000;
+    right: 2px;
+    left: auto;
+}
+
+/* overlay */
+.full-screen-overlay {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 2010 !important;
+    left: 0;
+    top: 0;
+    /* background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.9); */
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+.above-overlay {
+    z-index: 2030 !important;
+}

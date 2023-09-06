@@ -1,0 +1,140 @@
+{% extends "layouts/app.html" %}
+
+{% block title %}Users - Control Panel{% endblock title %}
+
+{% block main %}
+<main>
+    <div class="container">
+        <div class="mt-5">
+            {% with errors = get_flashed_messages(category_filter=["error"]) %}
+                {% if errors %}
+                <div class="alert alert-danger" role="alert">
+                    <ul>
+                        {% for message in errors %}
+                        <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            {% endwith %}
+            {% with successes = get_flashed_messages(category_filter=["success"]) %}
+                {% if successes %}
+                <div class="alert alert-success" role="alert">
+                    <ul>
+                        {% for message in successes %}
+                        <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <div class="mt-5">
+            <h2>Current Users</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Action</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Display Name</th>
+                    <th scope="col">Privileges</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>
+                            {{ loop.index }}
+                        </td>
+                        <td>
+                            {% if user.unique_id == current_user.unique_id %}
+                                <button type="button" class="btn btn-sm btn-outline-danger" title="You cannot delete yourself" style="pointer-events: auto;" disabled><i class="bi bi-trash"></i>delete</button>
+                            {% else %}
+                                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal-confirm-delete" data-uid="{{ user.unique_id }}" data-username="{{ user.username }}"  data-url="{{ url_for('admin.user_view', unique_id=user.unique_id) }}"><i class="bi bi-trash"></i> delete</button>
+                            {% endif %}
+                            
+                            <a href="{{ url_for('admin.user_view', unique_id=user.unique_id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i>edit</a>
+
+                        </td>
+                        <td>
+                            <b>{{ user.username }}</b>
+                        </td>
+                        <td>
+                            <b>{{ user.display_name }}</b>
+                        </td>
+                        <td>
+                            {% if user.is_admin %}
+                                admin
+                            {% else %}
+                                user
+                            {% endif %}
+                        </td>
+                    </li>
+                {% endfor %} 
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<div class="modal fade" id="modal-confirm-delete" tabindex="-1" aria-labelledby="confirm-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="confirm-modal-label">Confirm</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure to delete "<b class="js-b-user-name"></b>"?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger js-btn-delete-user" data-bs-dismiss="modal" data-uid="" id="btn-delete_user">Confirm</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}
+
+
+{% block script %}
+<script>
+const confirmationModal = document.getElementById("modal-confirm-delete");
+const btn_delete = document.getElementById("btn-delete_user");
+if (confirmationModal) {
+    confirmationModal.addEventListener('show.bs.modal', event => {
+        const button = event.relatedTarget
+        const userEl = confirmationModal.querySelector('.modal-body .js-b-user-name');
+        const modalConfirmButton = confirmationModal.querySelector(".modal-footer .js-btn-delete-user");
+        modalConfirmButton.setAttribute("data-uid", button.dataset.uid);
+        modalConfirmButton.setAttribute("data-url", button.dataset.url);
+        userEl.innerHTML = button.dataset.username;
+
+    })
+}
+if (btn_delete) {
+    btn_delete.addEventListener("click", ()=>{
+        if (btn_delete.dataset.uid != ""){
+            fetch( btn_delete.dataset.url, {
+                method: "DELETE",
+                body: JSON.stringify({
+                    unique_id: btn_delete.dataset.uid,
+                    _method: "delete",
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
+            .then( resposta => {
+                return resposta.json()
+            })
+            .then ( json => {
+                location.href = "{{ url_for("admin.users") }}";
+            });
+        }
+    });
+}
+</script>
+{% endblock script %}
