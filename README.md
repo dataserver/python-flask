@@ -25,9 +25,21 @@ Flask app boilerplate with database
     runner.py (for developemennt)
     wsgi.py (for production)
 
-Check files to set logs folder
+## Logs
+  Check runner.py and wsgi.py files to set logs
+  
+> https://flask.palletsprojects.com/en/2.3.x/logging/  
+> When you want to configure logging for your project, you should do it as soon as possible when the program starts.  
+> If you do not configure logging yourself, Flask will add a StreamHandler to app.logger automatically 
 
-## Config
+
+## Look up order for templates
+
+    first
+    /blueprints/abcdef/templates/abcdef/filename.html
+
+    next:
+    /templates/abcdef/filename.html
 
 
 
