@@ -1,17 +1,5 @@
-from flask import Response
-from flask import current_app as app
-from flask import (
-    flash,
-    jsonify,
-    make_response,
-    redirect,
-    render_template,
-    request,
-    send_from_directory,
-    url_for,
-)
+from flask import Response, make_response, render_template, send_from_directory
 from flaskapp.blueprints.home import bp
-from flaskapp.models import User
 
 
 @bp.route("/")

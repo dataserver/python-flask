@@ -1,11 +1,9 @@
 # from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
-from flaskapp.database.literalquery import literalquery
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
 
 db = SQLAlchemy()
-# ma = Marshmallow()
 
 
 @event.listens_for(Engine, "connect")

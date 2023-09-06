@@ -1,16 +1,4 @@
-import json
-import re
-
-from wtforms import (
-    BooleanField,
-    Field,
-    Form,
-    PasswordField,
-    RadioField,
-    StringField,
-    validators,
-)
-from wtforms.validators import URL, Email, Regexp, ValidationError
+from wtforms import Form, PasswordField, RadioField, StringField, validators
 
 
 class UserRegistrationForm(Form):

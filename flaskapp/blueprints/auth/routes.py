@@ -1,17 +1,14 @@
-from http import HTTPStatus
 from urllib.parse import urlparse
 
-from flask import abort
-from flask import current_app as app
-from flask import flash, jsonify, redirect, render_template, request, url_for
-from flask_login import current_user, login_required, login_user, logout_user
+from flask import flash, redirect, render_template, request, url_for
+from flask_login import login_required, login_user, logout_user
 from flaskapp.blueprints.auth import bp
 from flaskapp.blueprints.auth.helpers import url_has_allowed_host_and_scheme
 from flaskapp.blueprints.auth.validators import LoginForm
-from flaskapp.database import db, literalquery
+from flaskapp.database import db
 from flaskapp.exc import ErrorInvalidCredentials
 from flaskapp.models import User
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import check_password_hash
 
 
 @bp.route("/login", methods=["GET", "POST"])

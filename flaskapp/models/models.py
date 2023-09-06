@@ -4,7 +4,6 @@ from datetime import datetime
 from typing import Optional, TypedDict
 from uuid import uuid1
 
-from flask import session
 from flask_login import UserMixin
 from flask_sqlalchemy.model import DefaultMeta
 from flaskapp.database import db

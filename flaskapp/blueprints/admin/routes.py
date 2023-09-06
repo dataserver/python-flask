@@ -1,17 +1,16 @@
 from http import HTTPStatus
-from urllib.parse import urlparse
 from uuid import UUID
 
 from flask import abort
 from flask import current_app as app
 from flask import flash, jsonify, redirect, render_template, request, url_for
-from flask_login import current_user, login_required, login_user, logout_user
+from flask_login import current_user, login_required
 from flaskapp.blueprints.admin import bp
 from flaskapp.blueprints.admin.validators import UserEditForm, UserRegistrationForm
 from flaskapp.database import db, literalquery
 from flaskapp.exc import ErrorFormData, ErrorNotAdministrator
 from flaskapp.models import User
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import generate_password_hash
 
 
 @bp.route("/", methods=["GET"])

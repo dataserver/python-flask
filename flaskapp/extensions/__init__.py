@@ -1,9 +1,8 @@
 import re
 from http import HTTPStatus
 
-from flask import Flask, abort, redirect, request, url_for
+from flask import abort, redirect, request, url_for
 from flask_login import LoginManager
-from flask_sqlalchemy import SQLAlchemy
 from flaskapp.database import db
 from flaskapp.extensions.flask_uuid import FlaskUUID
 from flaskapp.models import User
