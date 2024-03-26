@@ -8,7 +8,7 @@ Flask app boilerplate with database
 - Flask-SQLAlchemy
 - pytz
 - SQLAlchemy
-- WTForms
+
 
 ## Control Panel
 

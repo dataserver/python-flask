@@ -30,7 +30,7 @@ class DevConfig(Config):
 
     BASE_PATH = "d:/python/boilerplates/python-flask/flaskapp"
     DATABASE_PATH = Path(
-        "d:/python/boilerplates/python-flask/flaskapp/database", "test.sqlite3"
+        "d:/python/boilerplates/python-flask/flaskapp/database", "dev.sqlite3"
     )
 
     SQLALCHEMY_DATABASE_URI = f"sqlite:///{str(DATABASE_PATH)}"

@@ -19,11 +19,11 @@ class DatabaseConnection:
         self.conn = sqlite3.connect(self.path)
         self.conn.row_factory = sqlite3.Row
         self.cursor = self.conn.cursor()
+        self.cursor.execute("PRAGMA foreign_keys=ON;")
         return self.cursor
 
     @overload
-    def __exit__(self, exc_type: None, exc_val: None, exc_tb: None) -> None:
-        ...
+    def __exit__(self, exc_type: None, exc_val: None, exc_tb: None) -> None: ...
 
     @overload
     def __exit__(
@@ -31,8 +31,7 @@ class DatabaseConnection:
         exc_type: type[BaseException],
         exc_val: BaseException,
         exc_tb: TracebackType,
-    ):
-        ...
+    ): ...
 
     def __exit__(
         self,
