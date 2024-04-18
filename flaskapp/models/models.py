@@ -1,16 +1,31 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, TypedDict
 from uuid import uuid4
 
+from flask import current_app as app
 from flask_login import UserMixin
 from flask_sqlalchemy.model import DefaultMeta
 from flaskapp.database import db
-from flaskapp.models.helpers import utc_now
 from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, inspect
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.schema import Computed, FetchedValue
+
+
+def iso_utc_now():
+    """
+    Returns
+        str:  Get current UTC time in the format YYYY-MM-DDThh:mm:ss.sssZ
+    Example
+        2024-12-30T22:59:02.481Z
+    """
+    return (
+        datetime.now(timezone.utc)
+        .isoformat(timespec="milliseconds")
+        .replace("+00:00", "Z")
+    )
+
 
 # Always use self for the first argument to instance methods.
 # Always use cls for the first argument to class methods.
@@ -82,8 +97,10 @@ class User(BaseModel, UserMixin):
     )
     is_admin: Mapped[bool] = mapped_column(Boolean, default=False)
     display_name: Mapped[Optional[str]] = mapped_column(String(100))
-    created_at: Mapped[str] = mapped_column(DateTime, default=utc_now)
-    updated_at: Mapped[str] = mapped_column(DateTime, default=utc_now, onupdate=utc_now)
+    created_at: Mapped[str] = mapped_column(String, default=iso_utc_now)
+    updated_at: Mapped[str] = mapped_column(
+        String, default=iso_utc_now, onupdate=iso_utc_now
+    )
     # fk_id: Mapped[int] = mapped_column(
     #     Integer, ForeignKey("table.fk_id"), nullable=False, index=True
     # )
@@ -114,8 +131,9 @@ class User(BaseModel, UserMixin):
             c.key: getattr(self, c.key) for c in self.__table__.columns  # type: ignore
         }
 
-    def __repr__(self):
-        return f"User(user_id={self.user_id}, username={self.username}, unique_id={self.unique_id}, is_admin={self.is_admin} ...)"
+    def touch(self):
+        """Função touch para forçar a função onupdate"""
+        self.updated_at = iso_utc_now()
 
     def save(self):
         # inject self into db session
@@ -132,3 +150,6 @@ class User(BaseModel, UserMixin):
     def get_admins(cls) -> list[User]:
         stmt = db.select(cls).where(User.is_admin.is_(False))  # type: ignore
         return db.session.execute(stmt).scalars().all()  # type: ignore
+
+    def __repr__(self):
+        return f"User(user_id={self.user_id}, username={self.username}, unique_id={self.unique_id}, is_admin={self.is_admin} ...)"

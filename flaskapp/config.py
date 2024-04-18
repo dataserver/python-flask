@@ -8,7 +8,6 @@ class Config(object):
     SECRET_KEY = "32d205291ea382c61a0e57ed34c92f66bd500758b1a34716b2ba168a6367bb17"
     TIMEZONE = "America/Sao_Paulo"
     DEFAULT_DISPLAY_DATETIME_FORMAT = "%Y-%m-%d %H:%M"
-    DATABASE_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
 
 
 class ProdConfig(Config):

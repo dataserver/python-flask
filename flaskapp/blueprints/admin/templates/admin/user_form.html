@@ -115,7 +115,12 @@
                     </div>
                 </fieldset>
                 {% endif %}
-                <div class="text-center">
+                {% if user_data.updated_at %}
+                <div class="text-center mb-3">
+                    Last updated: {{ user_data.updated_at|strftime }}
+                </div>
+                {% endif %}
+                <div class="text-center mb-3">
                     {% if user_data.unique_id %}
                         <button class="btn btn-primary" type="submit">Update</button>
                         <a class="btn btn-secondary" href="{{ url_for('admin.index') }}">Cancel</a>

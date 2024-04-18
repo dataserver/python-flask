@@ -1,18 +1,34 @@
 from datetime import datetime, timedelta
 from functools import wraps
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 from flask import Response
 from flask import current_app as app
 
 
-def filter_strftime(value, format=None):
-    """Format a date time to (Default): d Mon YYYY HH:MM P"""
-    if value is None:
-        return ""
-    dt = datetime.strptime(value, app.config["DEFAULT_DISPLAY_DATETIME_FORMAT"])
-    ft = format if format else app.config["DATABASE_DATETIME_FORMAT"]
-    return dt.strftime(ft)
+def filter_strftime(utc_dt_str: str, format=None) -> str:
+    """Convert stored string datetime from database
+    to format set in config timezone.
+
+    Args:
+        utc_dt_str (str): Datetime format
+
+    Returns:
+        str: Date string on format
+    """
+
+    # Parse the UTC datetime string and set the timezone to UTC
+    utc_dt = datetime.fromisoformat(utc_dt_str).replace(tzinfo=ZoneInfo("UTC"))
+
+    # Create the America/XYZ timezone object
+    target_tz = ZoneInfo(app.config["TIMEZONE"])
+
+    # Convert the UTC datetime object to America/XYZ timezone
+    target_dt = utc_dt.astimezone(target_tz)
+
+    format = format if format else app.config["DEFAULT_DISPLAY_DATETIME_FORMAT"]
+    return target_dt.strftime(format)
 
 
 def listdirs(rootdir):
