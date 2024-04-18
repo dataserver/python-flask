@@ -15,10 +15,15 @@ from sqlalchemy.schema import Computed, FetchedValue
 
 def iso_utc_now():
     """
-    Returns
-        str:  Get current UTC time in the format YYYY-MM-DDThh:mm:ss.sssZ
-    Example
-        2024-12-30T22:59:02.481Z
+    Returns the current UTC datetime in ISO 8601 format with milliseconds precision.
+
+    Returns:
+        str: The current UTC datetime in ISO 8601 format with milliseconds precision and 'Z' as the timezone indicator.
+
+    Examples:
+        >>> iso_utc_now()
+        '2024-04-18T12:17:30.123Z'
+
     """
     return (
         datetime.now(timezone.utc)
