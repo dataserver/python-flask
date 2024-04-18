@@ -2,13 +2,15 @@ from __future__ import annotations
 
 from datetime import datetime
 from typing import Optional, TypedDict
-from uuid import uuid1
+from uuid import uuid4
 
 from flask_login import UserMixin
 from flask_sqlalchemy.model import DefaultMeta
 from flaskapp.database import db
-from flaskapp.models.helpers import now_local_time
-from sqlalchemy import Boolean, Column, DateTime, Integer, String
+from flaskapp.models.helpers import utc_now
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, inspect
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.schema import Computed, FetchedValue
 
 # Always use self for the first argument to instance methods.
 # Always use cls for the first argument to class methods.
@@ -65,18 +67,32 @@ class UserModel(TypedDict):
 
 class User(BaseModel, UserMixin):
     __tablename__ = "users"
+    __table_args__ = (
+        db.Index("ix_username", "username"),
+        # db.Index("fk_user_othertable", "id"),
+    )
 
-    user_id = Column(Integer, primary_key=True, index=True)
-    unique_id = Column(String(100), nullable=False, default=str(uuid1()))
-    username = Column(String(100), nullable=False, unique=True)
-    display_name = Column(String(100), nullable=True)
-    password = Column(String(100), nullable=False)
-    is_admin = Column(Boolean, nullable=False, default=False)
-    created_at = Column(DateTime, default=now_local_time)
-    updated_at = Column(DateTime, default=now_local_time, onupdate=now_local_time)
+    user_id: Mapped[int] = mapped_column(primary_key=True)
+    username: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
+    password: Mapped[str] = mapped_column(String(100), nullable=False)
+
+    # extras
+    unique_id: Mapped[str] = mapped_column(
+        String(100), nullable=False, default=str(uuid4())
+    )
+    is_admin: Mapped[bool] = mapped_column(Boolean, default=False)
+    display_name: Mapped[Optional[str]] = mapped_column(String(100))
+    created_at: Mapped[str] = mapped_column(DateTime, default=utc_now)
+    updated_at: Mapped[str] = mapped_column(DateTime, default=utc_now, onupdate=utc_now)
+    # fk_id: Mapped[int] = mapped_column(
+    #     Integer, ForeignKey("table.fk_id"), nullable=False, index=True
+    # )
+    # computed_col: Mapped[int] = mapped_column(
+    #     Integer, Computed("substr( username, 1, 4 )", False)
+    # )
 
     def __init__(
-        self, *, username=None, display_name=None, password=None, is_admin=False
+        self, *, username, password, display_name=None, is_admin=False
     ) -> None:
         """* keyword arguments"""
         self.username = username
@@ -94,7 +110,9 @@ class User(BaseModel, UserMixin):
         return {"username": self.username}
 
     def to_dict(self) -> UserModel:
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}  # type: ignore
+        return {
+            c.key: getattr(self, c.key) for c in self.__table__.columns  # type: ignore
+        }
 
     def __repr__(self):
         return f"User(user_id={self.user_id}, username={self.username}, unique_id={self.unique_id}, is_admin={self.is_admin} ...)"
