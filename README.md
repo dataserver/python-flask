@@ -6,7 +6,7 @@ Flask app boilerplate with database
 - Flask
 - Flask-Login
 - Flask-SQLAlchemy
-- pytz
+- tzdata
 - SQLAlchemy
 
 
